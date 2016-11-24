@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+
+        <style type="text/css">
+            html { height: 100% }
+            body { height: 100%; margin: 0; padding: 0 }
+            #map_canvas { height: 100% }
+            #map_canvas { width: 100% }
+        </style>
+
+        <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?&sensor=false">
+        </script>
+
+        <script type="text/javascript">
+
+            function initialize() {
+
+                // centre map
+                var lat = 43.13644;
+                var lng = 6.01881;
+                var facLocation = new google.maps.LatLng(lat, lng);
+
+                // options de la map
+                var mapOptions = {
+                    zoom: 16,
+                    center: facLocation,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    disableDoubleClickZoom: false,
+                    keyboardShortcuts: true,
+                    scrollwheel: true,
+                    draggable: true,
+                    disableDefaultUI: false, // Completly disable all controls.
+                    mapTypeControl: true, // Allow to change map type.
+                    overviewMapControl: false, // Small window of overview.
+                    panControl: false, // Disc used to pan the map.
+                    rotateControl: false, // Scale slider?
+                    navigationControl: false, // Scale slider?
+                    streetViewControl: false, // Place a streetview camera.
+                    scaleControl: false, // Scale slider?
+                    zoomControl: false, // Scale slider?
+                    backgroundColor: "#666970",
+                };
+                var map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+                // equipes
+                var blueTeamColor = '#0040F0';
+                var redTeamColor = '#FE0000';
+
+                // tableau de joueurs
+                var players = [];
+                var nbPlayers = 0;
+
+                // tableau de portails
+                var portals = [];
+                var nbPortals = 0;
+
+                // tableau de champs
+                var fields = [];
+                var nbFields = 0;
+
+                // tableau d'items
+                var items = [];
+                var nbItems = 0;
+
+                // tableau de links
+                var links = [];
+                var nbLinks = 0;
+
+
+                //////// utilities ////////
+
+
+                document.drawLink = function drawLink(lat1, lng1, lat2, lng2, team) {
+
+                    var color;
+
+                    if (team == 1)
+                            color = blueTeamColor;
+                    else
+                            color = redTeamColor;
+
+                    var polyLineTab = [
+                        {lat: lat1, lng: lng1},
+                        {lat: lat2, lng: lng2}
+                    ];
+
+
+                    var polyLineOptions = {
+                        map: map,
+                        path: polyLineTab, // penser a faire un tableau de coords de latlng
+                        strokeColor: color // bleu
+                    };
+
+                    var polyLine = new google.maps.Polyline(polyLineOptions);
+
+                    links.push(polyLine);
+                    nbLinks++;
+                }
+                document.drawField = function drawField(lat1, lng1, lat2, lng2, lat3, lng3, team) {
+
+                    var triangleCoords = [
+                        {lat: lat1, lng: lng1},
+                        {lat: lat2, lng: lng2},
+                        {lat: lat3, lng: lng3}
+                    ];
+
+                    if (team == 1)
+                        color = blueTeamColor;
+                    else
+                        color = redTeamColor;
+
+                    var polygonOptions = {
+                        map: map,
+                        paths: triangleCoords,
+                        strokeColor: color,
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: color,
+                        fillOpacity: 0.35
+                    };
+
+                    var field = new google.maps.Polygon(polygonOptions);
+
+                    fields.push(field);
+                    nbFields++;
+                }
+                document.drawMapItem = function drawMapItem(lt, lg) {
+
+                    var marker;
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lt, lg),
+                        icon: "mapIcons/item.png",
+                        draggable:true
+                    });
+
+//                    document.getElementById("log").innerHTML = nickname;
+                    items.push(marker);
+                    nbItems++;
+                }
+                document.drawPlayer = function drawPlayer(lt, lg, team) {
+
+                    var marker;
+                    var color;
+
+                    if (team == 1)
+                        color = "mapIcons/player_blue.png";
+                    else
+                        color = "mapIcons/player_red.png";
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lt, lg),
+                        icon: color,
+                        label: playerName,
+                        draggable:true
+                    });
+
+                    players.push(marker);
+                    nbPlayers++;
+                }
+                document.drawBluePortal = function drawBluePortal(lt, lg) {
+
+                    var marker;
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lt, lg),
+                        icon: "mapIcons/portal_blue.png",
+                        draggable:true
+                    });
+
+                    portals.push(marker);
+                    nbPortals++;
+                }
+                document.drawRedPortal = function drawBluePortal(lt, lg) {
+
+                    var marker;
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lt, lg),
+                        icon: "mapIcons/portal_red.png",
+                        draggable:true
+                    });
+
+                    portals.push(marker);
+                    nbPortals++;
+                }
+                document.drawNeutralPortal = function drawBluePortal(lt, lg) {
+
+                    var marker;
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(lt, lg),
+                        icon: "mapIcons/portal_neutral.png",
+                        draggable:true
+                    });
+
+                    players.push(marker);
+                    nbPlayers++;
+                }
+//                document.clearPlayers = function clearPlayers(){
+//                    var cpt;
+//                    for (cpt=0; cpt<nbPlayers; cpt++){
+//                        players[cpt].setMap(null);
+//                    }
+//                    players = [];
+//                    nbPlayers = 0;
+//                }
+                document.clearPortals = function clearPortals(){
+                    var cpt;
+                    for (cpt=0; cpt<nbPortals; cpt++){
+                        portals[cpt].setMap(null);
+                    }
+                    portals = [];
+                    nbPortals = 0;
+                }
+                document.clearFields = function clearFields(){
+                    var cpt;
+                    for (cpt=0; cpt<nbFields; cpt++){
+                        fields[cpt].setMap(null);
+                    }
+                    fields = [];
+                    nbFields = 0;
+                }
+                document.clearItems = function clearItems(){
+                    var cpt;
+
+                    for (cpt=0; cpt<nbItems; cpt++){
+                        items[cpt].setMap(null);
+                    }
+                    items = [];
+                    nbItems = 0;
+                }
+                document.clearLinks = function clearLinks(){
+                    var cpt;
+
+                    for (cpt=0; cpt<nbLinks; cpt++){
+                        links[cpt].setMap(null);
+                    }
+                    links = [];
+                    nbLinks = 0;
+                }
+                document.zoomIn = function zoomIn() {
+                    var zoomLevel = map.getZoom();
+                    if (zoomLevel <= 20)
+                    map.setZoom(zoomLevel + 1);
+                }
+                document.zoomOut = function zoomOut() {
+                    var zoomLevel = map.getZoom();
+                    if (zoomLevel > 0)
+                    map.setZoom(zoomLevel - 1);
+                }
+                document.setMapTypeRoad = function setMapTypeRoad() {
+                    map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+                }
+                document.setMapTypeSatellite = function setMapTypeSatellite() {
+                    map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+                }
+                document.setMapTypeHybrid = function setMapTypeHybrid() {
+                    map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+                }
+                document.setMapTypeTerrain = function setMapTypeTerrain() {
+                    map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+                }
+                document.moveUp = function moveUp() {
+                    lat += 0.001;
+                    var newLocation = new google.maps.LatLng(lat, lng);
+                    map.setCenter(newLocation);
+                }
+                document.moveBot = function moveBot() {
+                    lat -= 0.001;
+                    var newLocation = new google.maps.LatLng(lat, lng);
+                    map.setCenter(newLocation);
+                }
+                document.moveLeft = function moveLeft() {
+                    lng -= 0.001;
+                    var newLocation = new google.maps.LatLng(lat, lng);
+                    map.setCenter(newLocation);
+                }
+                document.moveRight = function moveRight() {
+                    lng += 0.001;
+                    var newLocation = new google.maps.LatLng(lat, lng);
+                    map.setCenter(newLocation);
+                }
+            }
+        </script>
+    </head>
+
+    <body onload="initialize()">
+        <div id="map_canvas" style="width: 100%; height: 100%"></div>
+        <div id="log"></div>
+    </body>
+</html>
