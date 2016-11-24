@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="testpostgresqllocal" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>classes.CPlayer</class>
+        <class>classes.CTeam</class>
+        <class>classes.CPortal</class>
+        <class>classes.CResonator</class>
+        <class>classes.CSlot</class>
+        <class>classes.CField</class>
+        <class>classes.AUpgrade</class>
+        <class>classes.AItem</class>
+        <class>classes.CConsumable</class>
+        <class>classes.CField</class>
+        <class>classes.CFrequencyHackBoost</class>
+        <class>classes.CRangeBoost</class>
+        <class>classes.CShield</class>
+        <class>classes.CWeapon</class>
+        <class>classes.CInventory</class>
+        <class>classes.CTurret</class>
+        <class>classes.CLink</class>
+        <class>classes.CMapItem</class>
+        <class>classes.CKey</class>
+        <class>classes.CVirus</class>
+
+        <properties>
+            <!-- Les paramètres de connexions -->
+            <property name="javax.persistence.target-database" value="PostgreSQL"/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5433/"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="conquest"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
+            <property name="eclipselink.ddl-generation" value="create-tables"/>
+            <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
+        </properties>
+    </persistence-unit>
+    
+
+
+    <!-- Unit Testing Unit (haha) -->
+    <persistence-unit name="unit-test-database" transaction-type="RESOURCE_LOCAL">
+
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>classes.CPlayer</class>
+        <class>classes.CTeam</class>
+        <class>classes.CPortal</class>
+        <class>classes.CResonator</class>
+        <class>classes.CSlot</class>
+        <class>classes.CField</class>
+        <class>classes.AUpgrade</class>
+        <class>classes.AItem</class>
+        <class>classes.CConsumable</class>
+        <class>classes.CField</class>
+        <class>classes.CFrequencyHackBoost</class>
+        <class>classes.CRangeBoost</class>
+        <class>classes.CShield</class>
+        <class>classes.CWeapon</class>
+        <class>classes.CInventory</class>
+        <class>classes.CTurret</class>
+        <class>classes.CLink</class>
+        <class>classes.CMapItem</class>
+        <class>classes.CKey</class>
+        <class>classes.CVirus</class>
+
+        <properties>
+            <property name="javax.persistence.target-database" value="HSQL"/>
+            <property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:unit-test-db"/>
+            <property name="javax.persistence.jdbc.user" value="sa"/>
+            <property name="javax.persistence.jdbc.password" value=""/>
+            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
+            <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+
